@@ -54,4 +54,5 @@ class ListHeroAdapter(private val listHero: java.util.ArrayList<Hero>) : Recycle
     interface OnItemClickCallback {
         fun onItemClicked(data: Hero)
     }
+
 }

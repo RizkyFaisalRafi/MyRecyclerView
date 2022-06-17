@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.rifara.myrecyclerview.adapter.CardViewHeroAdapter
 import com.rifara.myrecyclerview.adapter.GridHeroAdapter
 import com.rifara.myrecyclerview.adapter.ListHeroAdapter
 import com.rifara.myrecyclerview.model.Hero
@@ -16,9 +17,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var rvHeroes: RecyclerView
     private var list: ArrayList<Hero> = arrayListOf()
 
+    private var title: String = "Mode List"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setActionBarTitle(title)
 
         rvHeroes = findViewById(R.id.rv_heroes)
         rvHeroes.setHasFixedSize(true)
@@ -58,15 +62,19 @@ class MainActivity : AppCompatActivity() {
     private fun setMode(selectedMode: Int) {
         when (selectedMode) {
             R.id.action_list -> {
-                showRecyclerList()
+                title = "Mode List"
+                showRecyclerList() /// List
             }
             R.id.action_grid -> {
-                showRecyclerGrid()
+                title = "Mode Grid"
+                showRecyclerGrid() /// Grid
             }
             R.id.action_cardview -> {
-
+                title = "Mode CardView"
+                showRecyclerCardView() /// CardView
             }
         }
+        setActionBarTitle(title) //
     }
 
     // Mode Grid Pada Recycler View
@@ -74,6 +82,23 @@ class MainActivity : AppCompatActivity() {
         rvHeroes.layoutManager = GridLayoutManager(this, 2)
         val gridHeroAdapter = GridHeroAdapter(list)
         rvHeroes.adapter = gridHeroAdapter
+
+        gridHeroAdapter.setOnItemClickCallback(object : GridHeroAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: Hero) {
+                showSelectedHero(data)
+            }
+        })
+    }
+
+    // Mode CardView pada Recycler View
+    private fun showRecyclerCardView() {
+        rvHeroes.layoutManager = LinearLayoutManager(this)
+        val cardViewHeroAdapter = CardViewHeroAdapter(list)
+        rvHeroes.adapter = cardViewHeroAdapter
+    }
+
+    private fun setActionBarTitle(title: String) {
+        supportActionBar?.title = title //
     }
 
 }
